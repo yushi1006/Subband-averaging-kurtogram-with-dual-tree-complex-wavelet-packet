@@ -1,26 +1,26 @@
 % Reference: Wang L, Liu Z, Cao H, et al. Subband averaging kurtogram with dual-tree complex wavelet packet 
 % transform for rotating machinery fault diagnosis[J]. Mechanical Systems and Signal Processing, 2020, 142: 106755.
 % --------------------------
-% Author: Wang Lei
+% Author: Wang Leiï¼ŒLiu Zhiwen
 % Email: wang_llei@163.com
 function DTWPT_MFK(x,K,nlevel,Fs)
 load dtcwpt_filters_long;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%ÊäÈë£ºxÊÇÊäÈëĞÅºÅ£»KÊÇÆ½¾ùµÄ´ÎÊı£»nlevelÊÇ·Ö½â²ãÊı£»FsÊÇ²ÉÑùÆµÂÊ¡£
-%¼ì²éÊäÈëÊı¾İ
+%è¾“å…¥ï¼šxæ˜¯è¾“å…¥ä¿¡å·ï¼›Kæ˜¯å¹³å‡çš„æ¬¡æ•°ï¼›nlevelæ˜¯åˆ†è§£å±‚æ•°ï¼›Fsæ˜¯é‡‡æ ·é¢‘ç‡ã€‚
+%æ£€æŸ¥è¾“å…¥æ•°æ®
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [m,n]=size(x);
 if n==1
     if m>1
         x=x';
     else
-        error('ÊäÈë±ØĞëÎªÏòÁ¿');
+        error('è¾“å…¥å¿…é¡»ä¸ºå‘é‡');
     end
 end
     
 N = length(x);
 if mod(N,K)~=0
-    error('ÊäÈë±ØĞëÊÇKµÄ±¶Êı');
+    error('è¾“å…¥å¿…é¡»æ˜¯Kçš„å€æ•°');
 end
 
 if nargin < 4
@@ -28,7 +28,7 @@ if nargin < 4
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%¼ÆËã×Ó´øµÄÇÍ¶ÈÖµ
+%è®¡ç®—å­å¸¦çš„å³­åº¦å€¼
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 x = x - mean(x);
 L=N/K;
@@ -36,7 +36,7 @@ L=N/K;
 Kwav = zeros(nlevel+1,2^nlevel);
 for i=1:K
     s=x(1+(i-1)*L:i*L);
-    KQ = K_dtwpQ(s,nlevel);		% ×Ó´øµÄÇÍ¶ÈÖµ
+    KQ = K_dtwpQ(s,nlevel);		% å­å¸¦çš„å³­åº¦å€¼
     KQ = KQ.*(KQ>0);
     Kwav = Kwav+KQ/K;
 end
@@ -50,7 +50,7 @@ fi = (ceil(J/2^(nlevel-I+1))-.5)*2^(-I+1)*0.5*Fs;
 title(['(a) K_{max}=',num2str(round(10*M)/10),' @ Level ',num2str(I-1),', Bw= ',num2str(Fs*2^(-I)),'Hz, fc=',num2str(fi),'Hz'])
 set(gca,'FontName','Times New Roman','FontSize',12);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Ë«Ê÷¸´Ğ¡²¨°ü±ä»»
+%åŒæ ‘å¤å°æ³¢åŒ…å˜æ¢
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 y1=SRDTWPT(x,first_1,h,f,I-1);
 y2=SRDTWPT(x,first_2,g,f,I-1);
@@ -87,9 +87,9 @@ set(gcf,'position',[413.0000 147.4000 560.0000 233.6000]);
 set(gca,'FontName','Times New Roman','FontSize',12);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ×Ó³ÌĞò
+% å­ç¨‹åº
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function K = kurt(x) %¼ÆËãÊäÈëĞòÁĞµÄÇÍ¶ÈÖµ
+function K = kurt(x) %è®¡ç®—è¾“å…¥åºåˆ—çš„å³­åº¦å€¼
     if all(x == 0), K = 0;return;end
     x = x - mean(x);
     E = mean(abs(x).^2);
@@ -104,14 +104,14 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [I,J,M] = max_IJ(X)
-% Êä³ö¾ØÕóX×î´óÖµ¼°ÆäÎ»ÖÃ.
+% è¾“å‡ºçŸ©é˜µXæœ€å¤§å€¼åŠå…¶ä½ç½®.
 
 [temp,tempI] = max(X);
 [M,J] = max(temp);
 I = tempI(J);
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
+function KQ = K_dtwpQ(x,nlevel)		% å­å¸¦çš„å³­åº¦å€¼
     load dtcwpt_filters_long;
     KQ=ones(nlevel+1,2^nlevel);
     y1=cell(nlevel,2^nlevel);
@@ -127,14 +127,14 @@ function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
             yy=afb(x,fil0,fil1);
             y1{1,1}=yy(1,:);
             y1{1,2}=yy(2,:);
-            %µÚÒ»²ãÊµ²¿·Ö½â
+            %ç¬¬ä¸€å±‚å®éƒ¨åˆ†è§£
             %==============================================================
             fil0=first_2(1,:);
             fil1=first_2(2,:);
             yy=afb(x,fil0,fil1);
             y2{1,1}=yy(1,:);
             y2{1,2}=yy(2,:);
-            %µÚÒ»²ãĞé²¿·Ö½â
+            %ç¬¬ä¸€å±‚è™šéƒ¨åˆ†è§£
             %==============================================================
             z{1,1}=y1{1,1}+1i*y2{1,1};
             z{1,2}=y1{1,2}+1i*y2{1,2};
@@ -147,14 +147,14 @@ function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
             yy=afb(y1{1,1},fil0,fil1);
             y1{2,1}=yy(1,:);
             y1{2,2}=yy(2,:);
-            %µÍÆµµÚ¶ş²ãÊµ²¿·Ö½â
+            %ä½é¢‘ç¬¬äºŒå±‚å®éƒ¨åˆ†è§£
             %==============================================================
             fil0=g(1,:);
             fil1=g(2,:);
             yy=afb(y2{1,1},fil0,fil1);
             y2{2,1}=yy(1,:);
             y2{2,2}=yy(2,:);
-            %µÍÆµµÚ¶ş²ãĞé²¿·Ö½â
+            %ä½é¢‘ç¬¬äºŒå±‚è™šéƒ¨åˆ†è§£
             %==============================================================
             fil0=h(1,:);
             fil1=h(2,:);
@@ -162,7 +162,7 @@ function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
             y1{2,3}=yy(1,:);
             y1{2,4}=yy(2,:);
             y1=rearrange(y1,2,3,4);
-            %¸ßÆµµÚ¶ş²ãÊµ²¿·Ö½â
+            %é«˜é¢‘ç¬¬äºŒå±‚å®éƒ¨åˆ†è§£
             %==============================================================
             fil0=g(1,:);
             fil1=g(2,:);
@@ -170,7 +170,7 @@ function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
             y2{2,3}=yy(1,:);
             y2{2,4}=yy(2,:);
             y2=rearrange(y2,2,3,4);
-            %¸ßÆµµÚ¶ş²ãĞé²¿·Ö½â
+            %é«˜é¢‘ç¬¬äºŒå±‚è™šéƒ¨åˆ†è§£
             %==============================================================
             z{2,1}=y1{2,1}+1i*y2{2,1};
             z{2,2}=y1{2,2}+1i*y2{2,2};
@@ -223,8 +223,8 @@ function KQ = K_dtwpQ(x,nlevel)		% ×Ó´øµÄÇÍ¶ÈÖµ
 end
 function [x] = ISRDTWPT(y,h_first,h,f)
 %inverse subband rearranged dual-tree wavelet packet transform
-%author:wang lei, Xi¡¯an Jiaotong University.
-%e-mail£ºwang_llei@163.com
+%author:wang lei, Xiâ€™an Jiaotong University.
+%e-mailï¼šwang_llei@163.com
 %the original DTWOT was developed by I. Bayram.
 %full packet inverse transform
 %y : the cell array arranged as in DTWPT
@@ -283,8 +283,8 @@ end
 
 function [y] = SRDTWPT(x,h_first,h,f,max_level)
 %subband rearranged dual-tree wavelet packet transform
-%author:wang lei, Xi¡¯an Jiaotong University.
-%e-mail£ºwang_llei@163.com
+%author:wang lei, Xiâ€™an Jiaotong University.
+%e-mailï¼šwang_llei@163.com
 %the original DTWOT was developed by I. Bayram.
 %x : input
 %h_first : first stage filters([h0_first;h1_first])
@@ -449,8 +449,8 @@ else
 end
 end
 function N = binary_number(i)
-%author:wang lei, Xi¡¯an Jiaotong University.
-%e-mail£ºwang_llei@163.com
+%author:wang lei, Xiâ€™an Jiaotong University.
+%e-mailï¼šwang_llei@163.com
 % Returns the number of nonzero coefficients of the binary expansion of i: 
 % i = a(1)*2^(k-1) + a(2)*2^(k-2) + ... + a(k)
 
