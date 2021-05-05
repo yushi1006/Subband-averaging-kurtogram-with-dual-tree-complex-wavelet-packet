@@ -1,4 +1,6 @@
 # Subband averaging kurtogram with dual-tree complex wavelet packet
+This repository provides the code for the paper Subband averaging kurtogram with dual-tree complex wavelet
+packet transform for rotating machinery fault diagnosis
 https://www.sciencedirect.com/science/article/pii/S0888327020301412
 
 Matlab Implementation of SAK. This paper presents a method called subband 
